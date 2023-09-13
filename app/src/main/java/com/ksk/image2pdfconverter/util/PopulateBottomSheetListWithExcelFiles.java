@@ -1,0 +1,34 @@
+package com.ksk.image2pdfconverter.util;
+
+import android.os.AsyncTask;
+
+import com.ksk.image2pdfconverter.interfaces.BottomSheetPopulate;
+
+import java.util.ArrayList;
+
+/**
+ * AsyncTask used to populate the list of elements in the background
+ */
+class PopulateBottomSheetListWithExcelFiles extends AsyncTask<Void, Void, ArrayList<String>> {
+
+    private final BottomSheetPopulate mOnLoadListener;
+    private final DirectoryUtils mDirectoryUtils;
+
+    PopulateBottomSheetListWithExcelFiles(BottomSheetPopulate listener,
+                            DirectoryUtils directoryUtils) {
+        mOnLoadListener = listener;
+        mDirectoryUtils = directoryUtils;
+    }
+
+    @Override
+    protected ArrayList<String> doInBackground(Void... voids) {
+        return mDirectoryUtils.getAllExcelDocumentsOnDevice();
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<String> paths) {
+        super.onPostExecute(paths);
+        mOnLoadListener.onPopulate(paths);
+    }
+
+}
